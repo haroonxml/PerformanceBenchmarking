@@ -1,0 +1,98 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <script src="https://code.jquery.com/jquery-3.6.0.slim.min.js"
+            integrity="sha256-u7e5khyithlIdTpu22PHhENmPcRdFiHRjhAuHcs05RI="
+            crossorigin="anonymous"></script>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <meta charset="utf-8" />
+    <title></title>
+</head>
+<body>
+
+    <center><h2>Hidden Variables</h2></center>
+
+    <div>
+        <input type="hidden" id="Control_01" value="ControlValue01" />
+        <input type="hidden" id="Control_02" value="ControlValue02" />
+        <input type="hidden" id="Control_03" value="ControlValue03" />
+
+        <input type="hidden" id="Control_04" value="ControlValue04" />
+        <input type="hidden" id="Control_05" value="ControlValue05" />
+        <input type="hidden" id="Control_06" value="ControlValue06" />
+
+        <input type="hidden" id="Control_07" value="ControlValue07" />
+        <input type="hidden" id="Control_08" value="ControlValue08" />
+        <input type="hidden" id="Control_09" value="ControlValue09" />
+    </div>
+
+    <div style="margin-top:150px; margin-left:200px;">
+        <div>
+            <span id="piechart"></span>
+            <span id="result"></span>
+        </div>
+        <div>
+            <input type="button" onclick="StartProcessing()" value="Perform Test" />
+        </div>
+    </div>
+
+    <div style="margin-top:20px; margin-left:200px;">
+        <span style="margin-right:10px;"><input type="button" onclick="openInNewWindow('');" value="Hidden Variables" /></span>
+        <span style="margin-right:10px;"><input type="button" onclick="openInNewWindow('HtmlPage2.html');" value="Data-Attributes" /></span>
+    </div>
+
+</body>
+</html>
+
+<script type="text/javascript">
+
+    google.charts.load('current', { 'packages': ['corechart'] });
+
+    function StartProcessing() {
+
+        var start = performance.now();
+
+        for (let i = 0; i < 100000; i++) {
+            window['marker01' + i] = document.getElementById("Control_01");
+            window['marker02' + i] = document.getElementById("Control_02");
+            window['marker03' + i] = document.getElementById("Control_03");
+            window['marker04' + i] = document.getElementById("Control_04");
+            window['marker05' + i] = document.getElementById("Control_05");
+            window['marker06' + i] = document.getElementById("Control_06");
+            window['marker07' + i] = document.getElementById("Control_07");
+            window['marker08' + i] = document.getElementById("Control_08");
+            window['marker09' + i] = document.getElementById("Control_09");
+        }
+        var end = performance.now();
+
+        $("#result").html('<b>Total time:</b> ' + (Math.round(end) - Math.round(start)) + ' (ms)' + '<br/><br/>'
+            + '<b>Memory Usage</b><br/>'
+            + 'Heap Size Limit: ' + performance.memory.jsHeapSizeLimit + '<br/>'
+            + 'Allocated Heap:  ' + performance.memory.totalJSHeapSize + '<br/>'
+            + 'Used Heap     :  ' + performance.memory.usedJSHeapSize  + '<br/><br/>'
+        );
+
+        renderChart(performance.memory.jsHeapSizeLimit, performance.memory.totalJSHeapSize);
+    }
+
+    function openInNewWindow(url) {
+        if (url) {
+            window.open(url);
+        }
+    }
+
+    function renderChart(jsHeapSizeLimit, totalJSHeapSize) {
+        var data = google.visualization.arrayToDataTable([
+            ['Memory', 'Values'],
+            ['Free Memory', jsHeapSizeLimit],
+            ['Used Memory', totalJSHeapSize]
+        ]);
+
+        var options = { 'title': '', 'width': 550, 'height': 250 };
+
+        var chart = new google.visualization.PieChart(document.getElementById('piechart'));
+        chart.draw(data, options);
+    }
+</script>
+
+
